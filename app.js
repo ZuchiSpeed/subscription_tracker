@@ -1,12 +1,40 @@
+/**
+ * ============================================================================
+ * SUBSCRIPTION TRACKER API - MAIN APPLICATION FILE
+ * ============================================================================
+ * This file serves as the entry point for the Express.js application.
+ * It initializes the server, loads configuration, and registers all API routes.
+ * ============================================================================
+ */
+
+// Import the Express framework to create a web server
 import express from "express";
+
+// Import the PORT number from our environment config file
 import { PORT } from "./config/env.js";
 
+import authRouter from "./routes/auth.routes.js"; // Handles login/signup routes
+import userRouter from "./routes/user.routes.js"; // Handles user management routes
+import subscriptionRouter from "./routes/subscription.routes.js"; // Handles subscription routes
+
+// Create a new Express application instance
 const app = express();
 
+// Mount the auth router: all requests to /api/v1/auth/* go to authRouter
+app.use("/api/v1/auth", authRouter);
+
+// Mount the user router: all requests to /api/v1/users/* go to userRouter
+app.use("/api/v1/users", userRouter);
+
+// Mount the subscription router: all requests to /api/v1/subscriptions/* go to subscriptionRouter
+app.use("/api/v1/subscriptions", subscriptionRouter);
+
+// Define a GET route for the root URL "/"
 app.get("/", (req, res) => {
   res.send("Wugwaan");
 });
 
+// Start the server and listen on the specified PORT
 app.listen(PORT, () => {
   console.log(`Server is running on https://localhost:${PORT}`);
 });
