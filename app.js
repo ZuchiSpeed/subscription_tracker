@@ -16,6 +16,7 @@ import { PORT } from "./config/env.js";
 import authRouter from "./routes/auth.routes.js"; // Handles login/signup routes
 import userRouter from "./routes/user.routes.js"; // Handles user management routes
 import subscriptionRouter from "./routes/subscription.routes.js"; // Handles subscription routes
+import connectToDatabase from "./database/mongodb.js"; // Function to connect to MongoDB database
 
 // Create a new Express application instance
 const app = express();
@@ -35,6 +36,11 @@ app.get("/", (req, res) => {
 });
 
 // Start the server and listen on the specified PORT
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server is running on https://localhost:${PORT}`);
+
+  // Connect to the MongoDB database when the server is running
+  await connectToDatabase();
 });
+
+export default app;
