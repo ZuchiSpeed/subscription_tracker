@@ -16,12 +16,12 @@ const userRouter = Router();
 
 // GET / - Fetch all users
 userRouter.get("/", (req, res) => {
-  res.send({ title: "Get all users" });
+  res.send({ id: "Get all users" });
 });
 
 // GET /:id - Fetch a single user by their ID (:id is a dynamic path parameter)
 userRouter.get("/:id", (req, res) => {
-  res.send({ title: "Get User By Id" });
+  res.send({ title: "I am user" });
 });
 
 // POST / - Create a new user
