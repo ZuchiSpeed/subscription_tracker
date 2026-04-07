@@ -19,6 +19,7 @@ import subscriptionRouter from "./routes/subscription.routes.js"; // Handles sub
 import connectToDatabase from "./database/mongodb.js"; // Function to connect to MongoDB database
 import errorMiddleware from "./middleware/error.middleware.js";
 import cookieParser from "cookie-parser";
+import arcjetMiddleware from "./middleware/arcjet.middleware.js";
 
 // Create a new Express application instance
 const app = express();
@@ -29,6 +30,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Middleware to parse cookies from incoming requests
 app.use(cookieParser());
+
+// Apply Arcjet middleware globally to all routes for bot protection and rate limiting
+app.use(arcjetMiddleware);
 
 // Mount the auth router: all requests to /api/v1/auth/* go to authRouter
 app.use("/api/v1/auth", authRouter);
