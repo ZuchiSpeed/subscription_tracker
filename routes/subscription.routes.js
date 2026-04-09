@@ -10,6 +10,11 @@
  */
 
 import { Router } from "express";
+import authorize from "../middleware/auth.middleware.js";
+import {
+  createSubscription,
+  getUserSubscriptions,
+} from "../controllers/subscription.controller.js";
 
 // Create a new router instance for subscription-related endpoints
 const subscriptionRouter = Router();
@@ -25,14 +30,10 @@ subscriptionRouter.get("/:id", (req, res) => {
 });
 
 // GET /user/:id - Fetch all subscriptions belonging to a specific user
-subscriptionRouter.get("/user/:id", (req, res) => {
-  res.send({ title: "Get User's Subscriptions By Id" });
-});
+subscriptionRouter.get("/user/:id", authorize, getUserSubscriptions);
 
 // POST / - Create a new subscription
-subscriptionRouter.post("/", (req, res) => {
-  res.send({ title: "Create New Subscription" });
-});
+subscriptionRouter.post("/", authorize, createSubscription);
 
 // PUT /:id - Update an existing subscription by its ID
 subscriptionRouter.put("/:id", (req, res) => {

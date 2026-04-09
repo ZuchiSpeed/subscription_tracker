@@ -181,7 +181,12 @@ const subscriptionSchema = new mongoose.Schema(
  */
 
 // Auto-calculate renewal date if missing
-subscriptionSchema.pre("save", function (next) {
+subscriptionSchema.pre("save", async function (next) {
+  // Only proceed if we have required fields
+  if (!this.startDate) {
+    return next(); // Let schema validation handle missing startDate
+  }
+
   if (!this.renewalDate) {
     const renewalPeriods = {
       daily: 1,
@@ -190,19 +195,23 @@ subscriptionSchema.pre("save", function (next) {
       yearly: 365,
     };
 
-    // Clone startDate to avoid mutating the original
+    const daysToAdd = renewalPeriods[this.frequency];
+
+    // Handle invalid frequency gracefully
+    if (daysToAdd === undefined) {
+      return next(new Error(`Invalid frequency value: "${this.frequency}"`));
+    }
+
     this.renewalDate = new Date(this.startDate);
-    this.renewalDate.setDate(
-      this.renewalDate.getDate() + renewalPeriods[this.frequency],
-    );
+    this.renewalDate.setDate(this.renewalDate.getDate() + daysToAdd);
   }
 
-  //Auto-update the status if renewal date has passed
-  if (this.renewalDate < new Date()) {
-    this.status = "expired";
+  // Only compare dates if valid
+  if (this.renewalDate instanceof Date && !isNaN(this.renewalDate.getTime())) {
+    if (this.renewalDate < new Date()) {
+      this.status = "expired";
+    }
   }
-
-  next();
 });
 
 //Mongoose model based on the suscriptionSchema

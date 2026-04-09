@@ -55,7 +55,7 @@ const authorize = async (req, res, next) => {
     req.user = user; // Attach user info to request object for use in controllers
     next(); // Proceed to the next middleware or route handler
   } catch (error) {
-    res.status(401).json({ message: "Unauthorized", error: error.message });
+    return res.status(401).json({ message: "Unauthorized", error: error.message });
   }
 };
 
