@@ -20,6 +20,7 @@ import connectToDatabase from "./database/mongodb.js"; // Function to connect to
 import errorMiddleware from "./middleware/error.middleware.js";
 import cookieParser from "cookie-parser";
 import arcjetMiddleware from "./middleware/arcjet.middleware.js";
+import workflowRouter from "./routes/workflow.routes.js";
 
 // Create a new Express application instance
 const app = express();
@@ -42,6 +43,8 @@ app.use("/api/v1/users", userRouter);
 
 // Mount the subscription router: all requests to /api/v1/subscriptions/* go to subscriptionRouter
 app.use("/api/v1/subscriptions", subscriptionRouter);
+
+app.use("/api/v1/workflow", workflowRouter);
 
 // Global error handling middleware
 app.use(errorMiddleware);
